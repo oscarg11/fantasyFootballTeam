@@ -12,8 +12,12 @@ app.use(cors({credentials: true, origin: 'http://localhost:3000'}))
 
 app.use(express.json(), express.urlencoded({extended: true}));//allows Json objects and strings and arrays
 
-// CHANGE THE ROUTE!!
+// user routes
 const AllMyRoutes = require('./routes/user.routes')//import routes
 AllMyRoutes(app);
+
+// //team routes
+const TeamRoutes = require('./routes/team.routes');
+TeamRoutes(app);
     
 app.listen(port, () => console.log(`Listening on port: ${port}`) );

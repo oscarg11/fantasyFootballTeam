@@ -1,4 +1,6 @@
 const mongoose = require('mongoose')
+const Team = require('./team.model');
+
 const bcrypt = require('bcrypt') //encrypts and hashes our password
 const {isEmail} = require('validator')
 
@@ -25,7 +27,11 @@ const UserSchema = new mongoose.Schema({
         type: String,
         required: [true, "Password is required"],
         minlength: [8, "Password must be 8 characters or longer"]
-      }
+      },
+      team: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Team"
+      }]
     
 }, {timestamps: true})
 
