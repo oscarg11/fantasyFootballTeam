@@ -40,6 +40,11 @@ const Dashboard = ({currentUser, setCurrentUser}) => {
       navigate('/createTeam')
     }
 
+    //edit a team button function
+    const goToEditTeam= (id) => {
+      navigate(`/edit/team/${id}`)
+  }
+
     //logout functionality
     const logout = () => {
         axios.post('http://localhost:8000/api/users/logout', {}, {withCredentials: true})
@@ -68,10 +73,16 @@ const Dashboard = ({currentUser, setCurrentUser}) => {
               <td>
                 {user.firstName} {user.lastName}
               </td>
-              <td>{user.team ? user.team.map(team => <Link to={`/displayTeam/`}>{team.name}</Link>).reduce((prev, curr) => [prev, ', ', curr]) : '-'}</td>
+              <td>
+                {user.team && user.team.length > 0 ? 
+                    user.team.map(team => <Link to={`/displayTeam/${team._id}`}>{team.name}</Link>)
+                    .reduce((prev, curr) => [prev, ', ', curr])
+                    : '-'
+                }
+            </td>
 
-
-              <td>{/* add actions here */}</td>
+              <td><button className='btn btn-primary mx-1' onClick={(e) => goToEditTeam(user._id)}>Update</button>
+                </td>
             </tr>
           ))}
         </tbody>

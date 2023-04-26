@@ -1,6 +1,7 @@
 const Team = require('../models/team.model')
 const User = require("../models/user.model");
 const jwt = require('jsonwebtoken')
+const mongoose = require('mongoose')
 //create a new team
 // module.exports.createNewTeam = async (req, res) => {
 //   try {
@@ -49,19 +50,35 @@ module.exports.createNewTeam = async (req, res) => {
     res.status(400).json({ message: 'Something went wrong', error: err })
   }
 }
-//get single team
+//get single user teams 
 module.exports.getSingleTeam = (req, res) => {
-  Team.findById(req.body.id)
-  console.log(req.body.id)
-  //.populate('createdBy', 'firstName lastName')
+  console.log(req.params)
+  if (!mongoose.isValidObjectId(req.params.id)) {
+    return res.status(400).json({ message: 'Invalid team ID' });
+  }
+  Team.findOne({_id: req.params.id})
+    .populate("createdBy", "firstName lastName")
   .then((oneTeam) => {
-    res.json({team: oneTeam})
-
-  })
-  .catch((err) => {
-    res.json({message: "something went wrong", error: err})
-  })
+    console.log("Single Team", oneTeam)
+      // if (!oneTeam) {
+      //   return res.status(404).json({ message: 'Team not found' });
+      // }
+      res.json({ oneTeam: oneTeam });
+    })
+    .catch((err) => res.status(500).json({ message: 'Something went wrong', error: err }));
 };
+
+//get team
+module.exports.getTeam = (req,res) => {
+  console.log("Display Team",req.params)
+  Team.find({ createdBy: req.params.id})
+  .then((teams) => {
+    console.log("Teams", teams);
+    res.json({ teams });
+  })
+  .catch((err) => res.status(500).json({ message: 'Something went wrong', error: err }));
+
+}
 
 // createCustoms: (req, res) => {
 
@@ -85,19 +102,6 @@ module.exports.getSingleTeam = (req, res) => {
 //       })
 // },
 
-// Get a single team by ID
-module.exports.getSingleTeam = (req, res) => {
-  const teamId = req.params.id;
-  Team.findById(teamId)
-    .populate('users', 'firstName lastName') // assuming you have a 'players' field in your Team model that stores the IDs of players in the team
-    .then(foundTeam => {
-      res.json({ team: foundTeam });
-    })
-    .catch(err => {
-      console.error(err);
-      res.status(500).json({ message: 'Server Error' });
-    });
-}
 
 // Update a team by ID
 module.exports.updateTeam = (req, res) => {

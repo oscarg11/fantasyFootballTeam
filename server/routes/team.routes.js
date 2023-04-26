@@ -1,4 +1,5 @@
-const TeamController = require('../controllers/team.controller')
+const TeamController = require('../controllers/team.controller');
+const Team = require('../models/team.model');
 
 module.exports = app => {
   // Create a new team
@@ -8,9 +9,9 @@ module.exports = app => {
   app.get('/api/teams', TeamController.getAllTeamsWithUsers);
   
    //get single team detail
-  app.get('/api/teamDetails', TeamController.getSingleTeam)
+  app.get('/api/teamDetails/:id', TeamController.getSingleTeam)
 
-  
+  app.get('/api/singleTeam/:id',TeamController.getTeam)
   // Update a team by ID
   app.put('/api/teams/:id', TeamController.updateTeam);
   

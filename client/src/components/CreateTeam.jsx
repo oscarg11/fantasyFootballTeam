@@ -14,14 +14,7 @@ export const CreateTeam = ({currentUser, setCurrentUser}) => {
 
     useEffect(() => {
     console.log("Retrieving playeys...")
-    // switched fetch to axios.get()
-    // axios.get("https://api-football-v1.p.rapidapi.com/v3/players?league=39&season=2022", {
-    // headers: {
-    //     "X-RapidAPI-Key": "b690d2ba97msh916cf0c6203dcecp16dd41jsnd52893b21d60",
-    //     "X-RapidAPI-Host": "api-football-v1.p.rapidapi.com",
-    // },
-    // })
-    axios.get('https://pokeapi.co/api/v2/pokemon?limit=807')
+    axios.get('https://pokeapi.co/api/v2/pokemon?limit=250')
     .then((response) => {
     console.log('Players retrieved!')
     //store the converted data in state so it can be displayed
@@ -46,8 +39,6 @@ const handlePlayerSelect = (event) => {
 };
 
   
-
-
 
     //logout functionality
     const logout = () => {
