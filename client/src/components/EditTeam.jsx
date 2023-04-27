@@ -18,6 +18,18 @@ const EditTeam = ({currentUser, setCurrentUser}) => {
     // error object to hold our error messages
     const [errors, setErrors] = useState({})
 
+
+     //set current logged in user
+     useEffect(() => {
+        axios.get('http://localhost:8000/api/users/loggedIn',{ withCredentials: true })
+          .then(res => {
+            console.log(res.data)
+            setCurrentUser(res.data)
+          })
+          .catch(err => {
+            console.log(err)
+          });
+      }, [])
     //retrieve data from api
     useEffect(() => {
         console.log("Retrieving playeys...")
@@ -88,7 +100,7 @@ const EditTeam = ({currentUser, setCurrentUser}) => {
 
 
   return (
-    <div>
+    <div  className='background-image text-white'>
         <NavBar/>
         <div style={{display: "table",margin: "0 auto", textAlign: "left"}}>
         <h2 className='m-3'>Welcome, {currentUser.firstName}!</h2>
@@ -104,7 +116,7 @@ const EditTeam = ({currentUser, setCurrentUser}) => {
                 <input type="text" name='search' className="form-control" value={teamName} onChange={(e) => setTeamName(e.target.value)} />
             </div>
 
-            <p>Please select exactly 11 players: </p>
+            <p className='mt-3'>Please select exactly 11 players: </p>
              {/* if an error exists from the field display the backend error messages for the user */}
              {
                     errors?.players? <p className="text-danger">{errors.players.message}</p> : ""

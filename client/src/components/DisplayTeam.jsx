@@ -10,6 +10,18 @@ const DisplayTeam = ({currentUser, setCurrentUser}) => {
   //single team objects
   const [singleTeam, setSingleTeam] = useState({})
 
+  //set current logged in user
+  useEffect(() => {
+    axios.get('http://localhost:8000/api/users/loggedIn',{ withCredentials: true })
+      .then(res => {
+        console.log(res.data)
+        setCurrentUser(res.data)
+      })
+      .catch(err => {
+        console.log(err)
+      });
+  }, [])
+
   //get one team query
   useEffect(() => {
     axios.get(`http://localhost:8000/api/teamDetails/${id}`)
@@ -25,10 +37,10 @@ return (
       <div className='card'>
     <h2 className='m-3'>Welcome, {currentUser.firstName}</h2>
     <h1>Team Details</h1>
-    <div className="card-header">
-      <h1 className='card-subtitle mb-2 text-muted'>Team creator Name: {singleTeam.createdBy ? singleTeam.createdBy.firstName + ' ' + singleTeam.createdBy.lastName : ''}</h1>
-      <h2 className='card-text'>Team Name: {singleTeam.name}</h2>
-      <div className='card-text'>
+    <div className="card-header card background-image">
+      <h1 className='card-subtitle mb-2 text-white'>Team creator Name: {singleTeam.createdBy ? singleTeam.createdBy.firstName + ' ' + singleTeam.createdBy.lastName : ''}</h1>
+      <h2 className='card-text text-white'>Team Name: {singleTeam.name}</h2>
+      <div className='card-text text-white'>
         <h3>Players:</h3>
       {singleTeam.players ? singleTeam.players.map((player) => (
         <p key={player.id}>{player}</p>

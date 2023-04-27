@@ -2,6 +2,7 @@ import React,{useState, useEffect} from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import axios from 'axios'
 import NavBar from '../components/NavBar';
+import '../styles.css'
 
 const Dashboard = ({currentUser, setCurrentUser}) => {
     const navigate = useNavigate();
@@ -10,6 +11,7 @@ const Dashboard = ({currentUser, setCurrentUser}) => {
     
     console.log("current user", currentUser)
 
+    //set current logged in user
     useEffect(() => {
       axios.get('http://localhost:8000/api/users/loggedIn',{ withCredentials: true })
         .then(res => {
@@ -47,19 +49,20 @@ const Dashboard = ({currentUser, setCurrentUser}) => {
   }
 
   return (
-    <div>
+    <div className='background-image'>
         <NavBar/>
+
         <div style={{display: "table",margin: "0 auto", textAlign: "left"}}>
-        <h1 className='m-3'>Welcome! {currentUser.firstName}</h1>
+        <h1 className='m-3 text-white'>Welcome, {currentUser.firstName}!</h1>
       <table className="table">
         <thead className="thead-dark">
-          <tr>
+          <tr className='text-white'>
             <th scope="col">Name</th>
             <th scope="col">Team Name</th>
             <th scope="col">Actions</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody className='text-white'>
           {users.map((user) => (
             <tr key={user.id}>
               <td>
