@@ -7,6 +7,7 @@ import RegLog from './components/RegLog';
 import DisplayTeam from './components/DisplayTeam';
 import { CreateTeam } from './components/CreateTeam';
 import EditTeam from './components/EditTeam'
+import NavBar from './components/NavBar';
 
 function App() {
   const [currentUser, setCurrentUser] = useState({})

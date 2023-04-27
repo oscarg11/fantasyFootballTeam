@@ -2,26 +2,7 @@ const Team = require('../models/team.model')
 const User = require("../models/user.model");
 const jwt = require('jsonwebtoken')
 const mongoose = require('mongoose')
-//create a new team
-// module.exports.createNewTeam = async (req, res) => {
-//   try {
-//     const userId = req.user._id; //Get the ID of the currently authenticated user
 
-//     //Create a new team with the provided name and the ID of the team owner
-//     const newTeam = await Team.create({
-//       name: req.body.name,
-//       owner: userId
-//     });
-
-//     //Add the newly created team ID to the list of teams of the team owner
-//     await User.findByIdAndUpdate(userId, { $push: { teams: newTeam._id } });
-
-//     res.json({ team: newTeam });
-//   } catch (err) {
-//     console.log(err);
-//     res.status(400).json({ message: 'Something went wrong', error: err });
-//   }
-// }
 module.exports.createNewTeam = async (req, res) => {
   try {
     const newTeamObject = await new Team(req.body);
@@ -50,7 +31,7 @@ module.exports.createNewTeam = async (req, res) => {
     res.status(400).json({ message: 'Something went wrong', error: err })
   }
 }
-//get single user teams 
+//get single user's teams 
 module.exports.getSingleTeam = (req, res) => {
   console.log(req.params)
   if (!mongoose.isValidObjectId(req.params.id)) {
@@ -68,7 +49,6 @@ module.exports.getSingleTeam = (req, res) => {
     .catch((err) => res.status(500).json({ message: 'Something went wrong', error: err }));
 };
 
-//get team
 module.exports.getTeam = (req,res) => {
   console.log("Display Team",req.params)
   Team.find({ createdBy: req.params.id})
@@ -77,44 +57,26 @@ module.exports.getTeam = (req,res) => {
     res.json({ teams });
   })
   .catch((err) => res.status(500).json({ message: 'Something went wrong', error: err }));
-
 }
-
-// createCustoms: (req, res) => {
-
-//   const newCustomObject = new Custom(req.body);
-
-//   const decodedJWT = jwt.decode(req.cookies.userToken, {
-//       complete: true
-//   })
-
-//   newCustomObject.createdBy = decodedJWT.payload.id;
-
-//   newCustomObject.save()
-
-//       .then((custom) => {
-//           console.log('custom!!!', custom);
-//           return res.json(custom)
-//       })
-//       .catch((err) => {
-//           res.status(400).json({ err });
-//           console.log("custom order not added");
-//       })
-// },
 
 
 // Update a team by ID
-module.exports.updateTeam = (req, res) => {
-  const teamId = req.params.id;
-  Team.findByIdAndUpdate(teamId, req.body, { new: true })
-    .then(updatedTeam => {
-      res.json({ team: updatedTeam });
-    })
-    .catch(err => {
-      console.error(err);
-      res.status(500).json({ message: 'Server Error' });
-    });
+module.exports.updateTeam = async (req, res) => {
+  try {
+    const updatedTeamObject = await Team.findOneAndUpdate(
+      { _id: req.params.id },
+      req.body,
+      { new: true, runValidators: true }
+    );
+    console.log("REQ.PARAMS.ID", req.params.id)
+    console.log("REQ.BODY!!!", req.body)
+    console.log("Team updated!", updatedTeamObject);
+    return res.json({ team: updatedTeamObject });
+  } catch (err) {
+    return res.status(400).json({ message: 'Something went wrong', error: err });
+  }
 }
+
 
 // Delete a team by ID
 module.exports.deleteTeam = (req, res) => {

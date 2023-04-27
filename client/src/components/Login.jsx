@@ -8,6 +8,8 @@ const Login = ({currentUser, setCurrentUser}) => {
         email: '',
         password: ""
     })
+    //error object to hold our messages
+    const [errors, setErrors] = useState(null)
 
 const changeHandler = (e) => {
     setUserInfo({...userInfo, [e.target.name]: e.target.value})
@@ -21,27 +23,52 @@ const submitHandler = (e) => {
             setCurrentUser(res.data.user)
             navigate('/dashboard')
         })
-        .catch(err => console.log(err))
+        .catch((err) =>{
+            console.log("BAD INPUT !!",err.response.data.message)
+            setErrors(err.response.data.message)
+        })
 }
-  return (
+return (
     <div className='col-5'>
-        <form onSubmit={submitHandler}>
-            <h2>Login</h2>
-            <div className='form-group mb-3'>
-                <label className='form-label'>Email:</label>
-                <input type="text"  name='email' className='form-control' value={userInfo.email} onChange={changeHandler}/>
-            </div>
-            <div className='form-group mb-3'>
-                <label className='form-label'>Password:</label>
-                <input type="password"  name='password' className='form-control' value={userInfo.password} onChange={changeHandler}/>
-            </div>
+      <form onSubmit={submitHandler}>
+        <h2>Login</h2>
+        {errors && <p className='text-danger'>{errors}</p>}
+        <div className='form-group mb-3'>
+          {/* Email */}
+          {errors?.email && (
+            <p className='text-danger'>{errors.email.message}</p>
+          )}
+          <label className='form-label'>Email:</label>
+          <input
+            type='text'
+            name='email'
+            className='form-control'
+            value={userInfo.email}
+            onChange={changeHandler}
+          />
+        </div>
+        <div className='form-group mb-3'>
+          {/* Password */}
+          {errors?.password && (
+            <p className='text-danger'>{errors.password.message}</p>
+          )}
+          <label className='form-label'>Password:</label>
+          <input
+            type='password'
+            name='password'
+            className='form-control'
+            value={userInfo.password}
+            onChange={changeHandler}
+          />
+        </div>
 
-            <div className='form-group mt-3'>
-                <button type='submit' className='btn btn-primary'>Login</button>
-            </div>
-        </form>
+        <div className='form-group mt-3'>
+          <button type='submit' className='btn btn-primary'>
+            Login
+          </button>
+        </div>
+      </form>
     </div>
-  )
-}
-
-export default Login
+  );
+        }
+export default Login;

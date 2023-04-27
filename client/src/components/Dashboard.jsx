@@ -1,13 +1,13 @@
 import React,{useState, useEffect} from 'react'
 import { useNavigate, Link } from 'react-router-dom'
-
 import axios from 'axios'
+import NavBar from '../components/NavBar';
 
 const Dashboard = ({currentUser, setCurrentUser}) => {
     const navigate = useNavigate();
     //stores users data
     const [users, setUsers] = useState([]);
-
+    
     console.log("current user", currentUser)
 
     useEffect(() => {
@@ -36,6 +36,7 @@ const Dashboard = ({currentUser, setCurrentUser}) => {
       });
   };
   console.log("users with Team", users)
+  console.log("user id",users)
     const createTeamButton = () => {
       navigate('/createTeam')
     }
@@ -45,20 +46,11 @@ const Dashboard = ({currentUser, setCurrentUser}) => {
       navigate(`/edit/team/${id}`)
   }
 
-    //logout functionality
-    const logout = () => {
-        axios.post('http://localhost:8000/api/users/logout', {}, {withCredentials: true})
-            .then(res => {
-                console.log(res)
-                navigate('/')})
-            .catch(err => console.log(err))
-    }
-
-
   return (
-    <div style={{display: "table",margin: "0 auto", textAlign: "left"}}>
-        <h1>Welcome! {currentUser.firstName}</h1>
-
+    <div>
+        <NavBar/>
+        <div style={{display: "table",margin: "0 auto", textAlign: "left"}}>
+        <h1 className='m-3'>Welcome! {currentUser.firstName}</h1>
       <table className="table">
         <thead className="thead-dark">
           <tr>
@@ -80,19 +72,24 @@ const Dashboard = ({currentUser, setCurrentUser}) => {
                     : '-'
                 }
             </td>
-
-              <td><button className='btn btn-primary mx-1' onClick={(e) => goToEditTeam(user._id)}>Update</button>
-                </td>
+            <td>
+              {/* Only the current user can manipulate their teams and hides update button if team doesnt exist yet*/}
+              {user._id === currentUser._id && user.team && user.team.length > 0 && (
+                <button
+                  className="btn btn-primary mx-1"
+                  onClick={(e) => goToEditTeam(user._id)}
+                >
+                  Update
+                </button>
+              )}
+            </td>
             </tr>
           ))}
         </tbody>
       </table>
 
-        
-
-        <button className='btn btn-success' onClick={createTeamButton}>Create New Team</button>
-
-        <button className='btn btn-danger' onClick={logout}>Log Out</button>
+      <button className='btn btn-success' onClick={createTeamButton}>Create New Team</button>
+    </div>
     </div>
   )
 }
