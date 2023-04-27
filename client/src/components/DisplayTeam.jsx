@@ -27,8 +27,9 @@ return (
     <h1>Team Details</h1>
     <div className="card-header">
       <h1 className='card-subtitle mb-2 text-muted'>Team creator Name: {singleTeam.createdBy ? singleTeam.createdBy.firstName + ' ' + singleTeam.createdBy.lastName : ''}</h1>
-      <p className='card-text'>Team Name: {singleTeam.name}</p>
+      <h2 className='card-text'>Team Name: {singleTeam.name}</h2>
       <div className='card-text'>
+        <h3>Players:</h3>
       {singleTeam.players ? singleTeam.players.map((player) => (
         <p key={player.id}>{player}</p>
       )) : null}
